@@ -19,6 +19,18 @@ router.post("/", verify, async (req, res) => {
 });
 
 //DELETE
+router.delete("/:id", verify, async (req, res) => {
+  if (req.user.isAdmin) {
+    try {
+      await List.findByIdAndDelete(req.params.id);
+      res.status(201).json("The List has been deleted!");
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  } else {
+    res.status(403).json("You are not allowed!");
+  }
+});
 
 //GET
 
