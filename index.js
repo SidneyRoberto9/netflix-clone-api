@@ -1,13 +1,15 @@
-const express = require("express");
-const app = express();
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const authRoutes = require("./routes/auth");
-const userRoutes = require("./routes/users");
 const moviesRoutes = require("./routes/movies");
+const userRoutes = require("./routes/users");
 const listRoutes = require("./routes/lists");
+const authRoutes = require("./routes/auth");
+const mongoose = require("mongoose");
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const app = express();
 
 dotenv.config();
+app.use(cors());
 app.use(express.json());
 
 mongoose
