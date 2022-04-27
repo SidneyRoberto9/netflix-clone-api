@@ -63,7 +63,7 @@ router.get("/:id", verify, async (req, res) => {
 });
 
 //GET RANDOM
-router.get("/random", verify, async (req, res) => {
+router.get("/random/movie", verify, async (req, res) => {
   const type = req.query.type;
   let movie;
   try {
@@ -78,10 +78,23 @@ router.get("/random", verify, async (req, res) => {
         { $sample: { size: 1 } },
       ]);
     }
-
     res.status(200).json(movie);
   } catch (error) {
     res.status(500).json(error);
+  }
+});
+
+//GET ALL
+router.get("/", verify, async (req, res) => {
+  if (req.user.isAdmin) {
+    try {
+      const movie = await Movie.find();
+      res.status(200).json(movie);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  } else {
+    res.status(403).json("You are not allowed!");
   }
 });
 
