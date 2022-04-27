@@ -62,7 +62,7 @@ router.get("/", verify, async (req, res) => {
 
   if (req.user.isAdmin) {
     try {
-      const users = query ? await User.find.limit(10) : await User.find();
+      const users = query ? await User.find().limit(10) : await User.find();
       res.status(200).json(users);
     } catch (err) {
       res.status(500).json(err);
