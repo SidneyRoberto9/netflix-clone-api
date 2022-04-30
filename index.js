@@ -12,6 +12,8 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 
+const PORT = process.env.PORT;
+
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
@@ -25,6 +27,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/movies", moviesRoutes);
 app.use("/api/lists", listRoutes);
 
-app.listen(8800, () => {
+app.listen(PORT, () => {
   console.log("Backend server is running on port 8800");
 });
