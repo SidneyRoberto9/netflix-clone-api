@@ -11,6 +11,8 @@ router.post("/register", async (req, res) => {
     username: username,
     email: email,
     password: CryptoJS.AES.encrypt(password, process.env.SECRET_KEY).toString(),
+    profilePic:
+      "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png",
   });
 
   try {
