@@ -86,9 +86,13 @@ router.get("/random/movie", verify, async (req, res) => {
 
 //GET ALL
 router.get("/", verify, async (req, res) => {
+  const query = req.query.new;
+
   if (req.user.isAdmin) {
     try {
-      const movie = await Movie.find();
+      const movie = query
+        ? await Movie.find().sort({ _id: -1 }).limit(5)
+        : await Movie.find();
       res.status(200).json(movie);
     } catch (error) {
       res.status(500).json(error);
