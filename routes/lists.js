@@ -61,4 +61,41 @@ router.get("/", verify, async (req, res) => {
   }
 });
 
+//GET random order
+router.get("/random", verify, async (req, res) => {
+  const typeQuery = req.query.type;
+  const genreQuery = req.query.genre;
+  let list = [];
+
+  function shuffleArr(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var rand = Math.floor(Math.random() * (i + 1));
+      [array[i], array[rand]] = [array[rand], array[i]];
+    }
+    return array;
+  }
+
+  try {
+    if (typeQuery) {
+      if (genreQuery) {
+        list = await List.aggregate([
+          { $sample: { size: 10 } },
+          { $match: { type: typeQuery, genre: genreQuery } },
+        ]);
+      } else {
+        list = await List.aggregate([
+          { $sample: { size: 10 } },
+          { $match: { type: typeQuery } },
+        ]);
+      }
+    } else {
+      list = await List.aggregate([{ $sample: { size: 10 } }]);
+    }
+
+    res.status(200).json(shuffleArr(list));
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 module.exports = router;
