@@ -74,6 +74,20 @@ router.get("/", verify, async (req, res) => {
   }
 });
 
+//verify user email
+router.get("/email/:email", verify, async (req, res) => {
+  try {
+    const users = await User.find({ email: req.params.email });
+    if (users.length > 0) {
+      res.status(200).json(true);
+    } else {
+      res.status(200).json(false);
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 //GET USER STATS
 router.get("/stats", async (req, res) => {
   const today = new Date();
