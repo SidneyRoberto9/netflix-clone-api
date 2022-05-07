@@ -1,4 +1,5 @@
 const moviesRoutes = require("./routes/movies");
+const seriesRoutes = require("./routes/series");
 const userRoutes = require("./routes/users");
 const listRoutes = require("./routes/lists");
 const authRoutes = require("./routes/auth");
@@ -25,6 +26,7 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/movies", moviesRoutes);
+app.use("/api/series", seriesRoutes);
 app.use("/api/lists", listRoutes);
 
 app.listen(PORT, () => {

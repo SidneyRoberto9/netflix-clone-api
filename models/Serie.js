@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const MovieSchema = new mongoose.Schema(
+const SerieSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, unique: true },
     desc: { type: String },
@@ -8,13 +8,13 @@ const MovieSchema = new mongoose.Schema(
     imgTitle: { type: String },
     imgSm: { type: String },
     trailer: { type: String },
-    video: { type: String },
+    video: { type: Array },
     year: { type: String },
     limit: { type: Number },
     genre: { type: String },
-    type: { type: String, default: "movie" },
+    type: { type: String, default: "serie" },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Movie", MovieSchema);
+module.exports = mongoose.model("Serie", SerieSchema);
