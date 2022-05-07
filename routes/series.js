@@ -55,30 +55,18 @@ router.delete("/:id", verify, async (req, res) => {
 //GET
 router.get("/:id", verify, async (req, res) => {
   try {
-    const Serie = await Serie.findById(req.params.id);
-    res.status(200).json(Serie);
+    const serie = await Serie.findById(req.params.id);
+    res.status(200).json(serie);
   } catch (error) {
     res.status(500).json(error);
   }
 });
 
 //GET RANDOM
-router.get("/random/Serie", verify, async (req, res) => {
-  const type = req.query.type;
-  let Serie;
+router.get("/random/serie", verify, async (req, res) => {
   try {
-    if (type === "series") {
-      Serie = await Serie.aggregate([
-        { $match: { isSeries: true } },
-        { $sample: { size: 1 } },
-      ]);
-    } else {
-      Serie = await Serie.aggregate([
-        { $match: { isSeries: false } },
-        { $sample: { size: 1 } },
-      ]);
-    }
-    res.status(200).json(Serie);
+    let serie = await Serie.aggregate([{ $sample: { size: 1 } }]);
+    res.status(200).json(serie);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -90,10 +78,10 @@ router.get("/", verify, async (req, res) => {
 
   if (req.user.isAdmin) {
     try {
-      const Serie = query
+      const serie = query
         ? await Serie.find().sort({ _id: -1 }).limit(5)
         : await Serie.find();
-      res.status(200).json(Serie);
+      res.status(200).json(serie);
     } catch (error) {
       res.status(500).json(error);
     }
