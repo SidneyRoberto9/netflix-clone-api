@@ -4,7 +4,10 @@
   "description": "\"# netflix-clone-api\"",
   "main": "server.ts",
   "scripts": {
-    "start": "ts-node-dev --transpile-only --ignore-watch node_modules server.ts"
+    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules server.ts",
+    "start": "node build/index.js",
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
   "repository": "git+https://github.com/SidneyRoberto9/netflix-clone-api.git",
   "keywords": [],
