@@ -1,9 +1,11 @@
-const router = require("express").Router();
-const Movie = require("../models/Movie");
-const verify = require("../verifyToken");
+import Movie from "../models/Movie";
+import verify from "../verifyToken";
+import { Router } from "express";
+
+const MovieRouter = Router();
 
 //CREATE
-router.post("/", verify, async (req, res) => {
+MovieRouter.post("/", verify, async (req: any, res: any) => {
   if (req.user.isAdmin) {
     const newMovie = new Movie(req.body);
 
@@ -19,7 +21,7 @@ router.post("/", verify, async (req, res) => {
 });
 
 //UPDATE
-router.put("/:id", verify, async (req, res) => {
+MovieRouter.put("/:id", verify, async (req: any, res: any) => {
   if (req.user.isAdmin) {
     try {
       const updatedMovie = await Movie.findByIdAndUpdate(
@@ -39,7 +41,7 @@ router.put("/:id", verify, async (req, res) => {
 });
 
 //DELETE
-router.delete("/:id", verify, async (req, res) => {
+MovieRouter.delete("/:id", verify, async (req: any, res: any) => {
   if (req.user.isAdmin) {
     try {
       await Movie.findByIdAndDelete(req.params.id);
@@ -53,7 +55,7 @@ router.delete("/:id", verify, async (req, res) => {
 });
 
 //GET
-router.get("/:id", verify, async (req, res) => {
+MovieRouter.get("/:id", verify, async (req: any, res: any) => {
   try {
     const movie = await Movie.findById(req.params.id);
     res.status(200).json(movie);
@@ -63,7 +65,7 @@ router.get("/:id", verify, async (req, res) => {
 });
 
 //GET RANDOM
-router.get("/random/movie", verify, async (req, res) => {
+MovieRouter.get("/random/movie", verify, async (req: any, res: any) => {
   try {
     let movie = await Movie.aggregate([{ $sample: { size: 1 } }]);
     res.status(200).json(movie);
@@ -73,7 +75,7 @@ router.get("/random/movie", verify, async (req, res) => {
 });
 
 //GET ALL
-router.get("/", verify, async (req, res) => {
+MovieRouter.get("/", verify, async (req: any, res: any) => {
   const query = req.query.new;
 
   if (req.user.isAdmin) {
@@ -90,4 +92,4 @@ router.get("/", verify, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default MovieRouter;

@@ -1,10 +1,12 @@
-const router = require("express").Router();
-const User = require("../models/User");
-const CryptoJS = require("crypto-js");
-const verify = require("../verifyToken");
+import verify from "../verifyToken";
+import User from "../models/User";
+import { Router } from "express";
+import CryptoJS from "crypto-js";
+
+const UsersRouter = Router();
 
 //UPDATE
-router.put("/:id", verify, async (req, res) => {
+UsersRouter.put("/:id", verify, async (req: any, res: any) => {
   if (req.user.id === req.params.id || req.user.isAdmin) {
     if (req.body.password) {
       req.body.password = CryptoJS.AES.encrypt(
@@ -32,7 +34,7 @@ router.put("/:id", verify, async (req, res) => {
 });
 
 //DELETE
-router.delete("/:id", verify, async (req, res) => {
+UsersRouter.delete("/:id", verify, async (req: any, res: any) => {
   if (req.user.id === req.params.id || req.user.isAdmin) {
     try {
       await User.findByIdAndDelete(req.params.id);
@@ -46,10 +48,10 @@ router.delete("/:id", verify, async (req, res) => {
 });
 
 //GET
-router.get("/find/:id", async (req, res) => {
+UsersRouter.get("/find/:id", async (req: any, res: any) => {
   try {
     const user = await User.findById(req.params.id);
-    const { password, ...info } = user._doc;
+    const { password, ...info } = JSON.parse(JSON.stringify(user));
     res.status(200).json(info);
   } catch (err) {
     res.status(500).json(err);
@@ -57,7 +59,7 @@ router.get("/find/:id", async (req, res) => {
 });
 
 //GET ALL
-router.get("/", verify, async (req, res) => {
+UsersRouter.get("/", verify, async (req: any, res: any) => {
   const query = req.query.new;
 
   if (req.user.isAdmin) {
@@ -75,7 +77,7 @@ router.get("/", verify, async (req, res) => {
 });
 
 //verify user email
-router.get("/email/:email", async (req, res) => {
+UsersRouter.get("/email/:email", async (req: any, res: any) => {
   try {
     const users = await User.find({ email: req.params.email });
     if (users.length > 0) {
@@ -89,7 +91,7 @@ router.get("/email/:email", async (req, res) => {
 });
 
 //GET USER STATS
-router.get("/stats", async (req, res) => {
+UsersRouter.get("/stats", async (req: any, res: any) => {
   const today = new Date();
   const latYear = today.setFullYear(today.getFullYear() - 1);
 
@@ -129,4 +131,4 @@ router.get("/stats", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default UsersRouter;

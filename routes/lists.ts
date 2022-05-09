@@ -1,9 +1,11 @@
-const router = require("express").Router();
-const List = require("../models/List");
-const verify = require("../verifyToken");
+import verify from "../verifyToken";
+import List from "../models/List";
+import { Router } from "express";
+
+const ListsRouter = Router();
 
 //CREATE
-router.post("/", verify, async (req, res) => {
+ListsRouter.post("/", verify, async (req: any, res: any) => {
   if (req.user.isAdmin) {
     const newList = new List(req.body);
 
@@ -19,7 +21,7 @@ router.post("/", verify, async (req, res) => {
 });
 
 //DELETE
-router.delete("/:id", verify, async (req, res) => {
+ListsRouter.delete("/:id", verify, async (req: any, res: any) => {
   if (req.user.isAdmin) {
     try {
       await List.findByIdAndDelete(req.params.id);
@@ -33,7 +35,7 @@ router.delete("/:id", verify, async (req, res) => {
 });
 
 //GET
-router.get("/", verify, async (req, res) => {
+ListsRouter.get("/", verify, async (req: any, res: any) => {
   const typeQuery = req.query.type;
   const genreQuery = req.query.genre;
   let list = [];
@@ -62,7 +64,7 @@ router.get("/", verify, async (req, res) => {
 });
 
 //GET random order
-router.get("/random", verify, async (req, res) => {
+ListsRouter.get("/random", verify, async (req: any, res: any) => {
   const typeQuery = req.query.type;
   const genreQuery = req.query.genre;
   let list = [];
@@ -98,4 +100,4 @@ router.get("/random", verify, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default ListsRouter;

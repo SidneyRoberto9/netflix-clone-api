@@ -1,6 +1,21 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const MovieSchema = new mongoose.Schema(
+export interface movieModelInterface {
+  title: string;
+  desc: string;
+  img: string;
+  imgTitle: string;
+  imgSm: string;
+  trailer: string;
+  video: string;
+  year: string;
+  limit: number;
+  genre: string;
+  duration: string;
+  type: string;
+}
+
+const MovieSchema = new Schema(
   {
     title: { type: String, required: true, unique: true },
     desc: { type: String },
@@ -18,4 +33,4 @@ const MovieSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Movie", MovieSchema);
+export default model<movieModelInterface>("Movie", MovieSchema);

@@ -1,10 +1,12 @@
-const router = require("express").Router();
-const User = require("../models/User");
-const CryptoJS = require("crypto-js");
-const jwt = require("jsonwebtoken");
+import * as jwt from "jsonwebtoken";
+import User from "../models/User";
+import CryptoJS from "crypto-js";
+import { Router } from "express";
+
+const AuthRouter = Router();
 
 //REGISTER
-router.post("/register", async (req, res) => {
+AuthRouter.post("/register", async (req: any, res: any) => {
   const { username, email, password } = req.body;
 
   const newUser = new User({
@@ -24,7 +26,7 @@ router.post("/register", async (req, res) => {
 });
 
 //LOGIN
-router.post("/login", async (req, res) => {
+AuthRouter.post("/login", async (req: any, res: any) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
@@ -32,7 +34,7 @@ router.post("/login", async (req, res) => {
       return res.status(404).json("Wrong password or username!");
     }
 
-    const { password, ...info } = user._doc;
+    const { password, ...info } = JSON.parse(JSON.stringify(user));
     const decryptedPassword = CryptoJS.AES.decrypt(
       user.password,
       process.env.SECRET_KEY
@@ -45,7 +47,7 @@ router.post("/login", async (req, res) => {
     const accessToken = jwt.sign(
       { id: user._id, isAdmin: user.isAdmin },
       process.env.SECRET_KEY,
-      { expiresIn: "5d" }
+      { expiresIn: "365d" }
     );
 
     res.status(200).json({ ...info, accessToken });
@@ -54,4 +56,4 @@ router.post("/login", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default AuthRouter;
