@@ -7,7 +7,6 @@ export interface movieModelInterface {
   imgTitle: string;
   imgSm: string;
   trailer: string;
-  video: string;
   year: string;
   limit: number;
   genre: string;
@@ -23,12 +22,11 @@ const MovieSchema = new Schema(
     imgTitle: { type: String },
     imgSm: { type: String },
     trailer: { type: String },
-    video: { type: String },
     year: { type: String },
     limit: { type: Number },
     genre: { type: String },
     duration: { type: String },
-    type: { type: String, default: "movie" },
+    type: { type: String },
   },
   { timestamps: true }
 );

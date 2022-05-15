@@ -1,5 +1,4 @@
 import MoviesRouter from "./routes/movies";
-import SeriesRouter from "./routes/series";
 import ListsRouter from "./routes/lists";
 import UsersRouter from "./routes/users";
 import AuthRouter from "./routes/auth";
@@ -29,7 +28,6 @@ mongoose
 app.use("/api/auth", AuthRouter);
 app.use("/api/lists", ListsRouter);
 app.use("/api/movies", MoviesRouter);
-app.use("/api/series", SeriesRouter);
 app.use("/api/users", UsersRouter);
 
 app.listen(PORT, () => {
