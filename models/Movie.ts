@@ -4,8 +4,6 @@ export interface movieModelInterface {
   title: string;
   desc: string;
   img: string;
-  imgTitle: string;
-  imgSm: string;
   trailer: string;
   year: string;
   limit: number;
