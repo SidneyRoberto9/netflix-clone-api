@@ -6,7 +6,16 @@ const ListsRouter = Router();
 
 //CREATE
 ListsRouter.post("/", verify, async (req: any, res: any) => {
+  function shuffleArr(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var rand = Math.floor(Math.random() * (i + 1));
+      [array[i], array[rand]] = [array[rand], array[i]];
+    }
+    return array;
+  }
+
   if (req.user.isAdmin) {
+    req.body.content = shuffleArr(req.body.content);
     const newList = new List(req.body);
 
     try {
