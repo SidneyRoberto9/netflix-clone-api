@@ -5,9 +5,10 @@ import AuthRouter from "./routes/auth";
 
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
-import express from "express";
+import express, { Router } from "express";
 import cors from "cors";
 import "dotenv/config";
+import startRouter from "./routes/start";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -29,6 +30,7 @@ app.use("/api/auth", AuthRouter);
 app.use("/api/lists", ListsRouter);
 app.use("/api/movies", MoviesRouter);
 app.use("/api/users", UsersRouter);
+app.use(startRouter);
 
 app.listen(PORT, () => {
   console.log("Backend server is running on port " + PORT);
