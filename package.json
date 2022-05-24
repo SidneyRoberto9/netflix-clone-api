@@ -5,7 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules server.ts",
-    "start:heroku": "node build/server.js",
+    "start": "node build/server.js",
     "build": "tsc",
     "postinstall": "npm run build"
   },
