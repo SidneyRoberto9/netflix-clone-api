@@ -1,12 +1,13 @@
-import verify from "../verifyToken";
-import User from "../models/User";
-import { Router } from "express";
-import CryptoJS from "crypto-js";
+import CryptoJS from 'crypto-js';
+import { Router } from 'express';
+
+import User from '../models/User';
+import verify from '../verifyToken';
 
 const UsersRouter = Router();
 
 //UPDATE
-UsersRouter.put("/:id", verify, async (req: any, res: any) => {
+UsersRouter.put('/:id', verify, async (req: any, res: any) => {
   if (req.user.id === req.params.id || req.user.isAdmin) {
     if (req.body.password) {
       req.body.password = CryptoJS.AES.encrypt(
@@ -29,26 +30,26 @@ UsersRouter.put("/:id", verify, async (req: any, res: any) => {
       res.status(500).json(err);
     }
   } else {
-    res.status(403).json("You can update only your account!");
+    res.status(403).json('You can update only your account!');
   }
 });
 
 //DELETE
-UsersRouter.delete("/:id", verify, async (req: any, res: any) => {
+UsersRouter.delete('/:id', verify, async (req: any, res: any) => {
   if (req.user.id === req.params.id || req.user.isAdmin) {
     try {
       await User.findByIdAndDelete(req.params.id);
-      res.status(200).json("User has been deleted!");
+      res.status(200).json('User has been deleted!');
     } catch (err) {
       res.status(500).json(err);
     }
   } else {
-    res.status(403).json("You can delete only your account!");
+    res.status(403).json('You can delete only your account!');
   }
 });
 
 //GET
-UsersRouter.get("/find/:id", async (req: any, res: any) => {
+UsersRouter.get('/find/:id', async (req: any, res: any) => {
   try {
     const user = await User.findById(req.params.id);
     const { password, ...info } = JSON.parse(JSON.stringify(user));
@@ -59,7 +60,7 @@ UsersRouter.get("/find/:id", async (req: any, res: any) => {
 });
 
 //GET ALL
-UsersRouter.get("/", verify, async (req: any, res: any) => {
+UsersRouter.get('/', verify, async (req: any, res: any) => {
   const query = req.query.new;
 
   if (req.user.isAdmin) {
@@ -72,12 +73,12 @@ UsersRouter.get("/", verify, async (req: any, res: any) => {
       res.status(500).json(err);
     }
   } else {
-    res.status(403).json("You are not allowed to see all users!");
+    res.status(403).json('You are not allowed to see all users!');
   }
 });
 
 //verify user email
-UsersRouter.get("/email/:email", async (req: any, res: any) => {
+UsersRouter.get('/email/:email', async (req: any, res: any) => {
   try {
     const users = await User.find({ email: req.params.email });
     if (users.length > 0) {
@@ -91,35 +92,35 @@ UsersRouter.get("/email/:email", async (req: any, res: any) => {
 });
 
 //GET USER STATS
-UsersRouter.get("/stats", async (req: any, res: any) => {
+UsersRouter.get('/stats', async (req: any, res: any) => {
   const today = new Date();
   const latYear = today.setFullYear(today.getFullYear() - 1);
 
   const monthsArray = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   try {
     const data = await User.aggregate([
       {
         $project: {
-          month: { $month: "$createdAt" },
+          month: { $month: '$createdAt' },
         },
       },
       {
         $group: {
-          _id: "$month",
+          _id: '$month',
           total: { $sum: 1 },
         },
       },
@@ -128,6 +129,27 @@ UsersRouter.get("/stats", async (req: any, res: any) => {
     res.status(200).json(data);
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+//update isAdmin
+UsersRouter.put('/:id/:value', verify, async (req: any, res: any) => {
+  if (req.user.id === req.params.id || req.user.isAdmin) {
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: { isAdmin: req.body.isAdmin },
+        },
+        { new: true }
+      );
+
+      res.status(200).json(updatedUser);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json('You can update only your account!');
   }
 });
 
