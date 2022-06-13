@@ -136,7 +136,7 @@ UsersRouter.get('/stats', async (req: any, res: any) => {
 UsersRouter.get('/:id/:value', verify, async (req: any, res: any) => {
   if (req.user.id === req.params.id || req.user.isAdmin) {
     try {
-      await User.findByIdAndUpdate(
+      const user = await User.findByIdAndUpdate(
         req.params.id,
         {
           $set: { isAdmin: req.body.isAdmin },
@@ -144,7 +144,7 @@ UsersRouter.get('/:id/:value', verify, async (req: any, res: any) => {
         { new: true }
       );
 
-      res.status(200).json('User Admin has been Updated!');
+      res.status(200).json(user);
     } catch (err) {
       res.status(500).json(err);
     }
