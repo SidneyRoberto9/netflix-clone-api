@@ -139,7 +139,7 @@ UsersRouter.get('/:id/:value', verify, async (req: any, res: any) => {
       const user = await User.findByIdAndUpdate(
         req.params.id,
         {
-          $set: { isAdmin: req.body.isAdmin },
+          $set: { isAdmin: req.params.value },
         },
         { new: true }
       );
