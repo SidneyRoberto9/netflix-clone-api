@@ -133,7 +133,7 @@ UsersRouter.get('/stats', async (req: any, res: any) => {
 });
 
 //update isAdmin
-UsersRouter.put('/:id/:value', verify, async (req: any, res: any) => {
+UsersRouter.get('/:id/:value', verify, async (req: any, res: any) => {
   if (req.user.id === req.params.id || req.user.isAdmin) {
     try {
       const updatedUser = await User.findByIdAndUpdate(
